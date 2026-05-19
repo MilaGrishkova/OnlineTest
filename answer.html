@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>answer</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background:
+        linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+        url('foto/index1.png') no-repeat center center fixed;
+      background-size: cover;
+      margin: 0;
+      padding: 20px;
+      min-height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      color: #333;
+    }
+
+    .container {
+      max-width: 700px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 30px 20px 40px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+      box-sizing: border-box;
+      text-align: center;
+      margin-top: 120px;
+    }
+
+    h2 {
+      color: #004080;
+      margin-bottom: 30px;
+    }
+
+    .correct {
+      color: green;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .wrong {
+      color: rgb(255, 98, 0);
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .correct-answer {
+      margin-top: 20px;
+      font-size: 18px;
+      color: #004080;
+    }
+
+    .warning {
+      color: rgb(255, 255, 255);
+      font-weight: bold;
+      margin-top: 20px;
+      font-size: 16px;
+    }
+
+    button {
+      display: block;
+      margin: 40px auto 0 auto;
+      padding: 15px 40px;
+      font-size: 20px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+      width: max-content;
+    }
+
+    button:hover {
+      background-color: #005fa3;
+    }
+
+    @media (max-width: 400px) {
+      h2 {
+        font-size: 22px;
+      }
+      .correct, .wrong {
+        font-size: 18px;
+      }
+      .correct-answer {
+        font-size: 16px;
+      }
+      button {
+        font-size: 18px;
+        padding: 12px 30px;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <div class="container">
+    <h2>Antwort Ergebnis</h2>
+    <div id="resultText"></div>
+    <div id="correctAnswerText"></div>
+    <div id="warningText"></div>
+    <button id="nextBtn">Nächste Frage</button>
+  </div>
+
+  <script>
+    const params = new URLSearchParams(window.location.search);
+    const qIndex = parseInt(params.get('q')) || 0;
+    let correctSelected = parseInt(params.get('correct')) || 0;
+    let wrongSelected = parseInt(params.get('wrong')) || 0;
+    const correctAnswer = params.get('correctAnswer') || '';
+
+    const resultDiv = document.getElementById('resultText');
+    const correctAnswerDiv = document.getElementById('correctAnswerText');
+    const warningDiv = document.getElementById('warningText');
+
+    const correctStr = `<span class="correct">${correctSelected} richtige</span>`;
+    const wrongStr = `<span class="wrong">${wrongSelected} falsche</span>`;
+    const resultTextColored = `Antwort gewählt: ${correctStr} und ${wrongStr} Antworten.`;
+    resultDiv.innerHTML = `<p>${resultTextColored}</p>`;
+
+   
+    const answersArray = correctAnswer.split(/[,;]/).map(ans => ans.trim()).filter(ans => ans.length > 0);
+
+    if (answersArray.length === 1) {
+      correctAnswerDiv.innerHTML = `<p class="correct-answer">Der richtige Antwort ist: <strong>${correctAnswer}</strong></p>`;
+    } else if (answersArray.length > 1) {
+      const joinedAnswers = answersArray.join(', ');
+      correctAnswerDiv.innerHTML = `<p class="correct-answer">Die richtigen Antworten sind: <strong>${joinedAnswers}</strong></p>`;
+    }
+
+    warningDiv.textContent = '';
+    localStorage.setItem('showWarning', '0');
+
+    document.getElementById('nextBtn').addEventListener('click', () => {
+      const order = JSON.parse(localStorage.getItem('quizOrder')) || [];
+      if (wrongSelected >= 10) {
+        location.href = 'result.html';
+        return;
+      }
+
+      if (qIndex + 1 < order.length) {
+        location.href = `question.html?q=${qIndex + 1}&correct=${correctSelected}&wrong=${wrongSelected}`;
+      } else {
+        location.href = 'result.html';
+      }
+    });
+  </script>
+
+</body>
+</html>
