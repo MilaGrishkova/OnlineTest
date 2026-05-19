@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>info</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      background: 
+        linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+        url('foto/index1.png') no-repeat center center fixed;
+      background-size: cover;
+      color: #333;
+      margin: 0;
+      padding: 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+      min-height: 100vh;
+    }
+
+    .container {
+      max-width: 700px;
+      width: 100%;
+      background: rgba(255, 255, 255, 0.9);
+      padding: 30px 20px 40px 20px;
+      border-radius: 8px;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    }
+
+    h1 {
+      color: #004080;
+      margin-bottom: 30px;
+      text-align: center;
+    }
+
+    p {
+      font-size: 18px;
+      margin: 12px 0;
+      text-align: justify;
+    }
+
+    .highlight {
+      font-weight: bold;
+      color: #004080;
+      font-size: 20px;
+      margin-top: 25px;
+    }
+
+    .start-btn {
+      display: block;
+      margin: 40px auto 0;
+      padding: 15px 40px;
+      font-size: 20px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      border-radius: 6px;
+      cursor: pointer;
+      text-align: center;
+      transition: background-color 0.3s ease;
+      width: max-content;
+    }
+
+    .start-btn:hover {
+      background-color: #005fa3;
+    }
+
+    .emoji {
+      font-size: 20px;
+      margin-right: 5px;
+    }
+
+    @media (max-width: 400px) {
+      p, .highlight {
+        font-size: 16px;
+      }
+      .start-btn {
+        font-size: 18px;
+        padding: 12px 30px;
+      }
+    }
+
+    #warning-modal {
+      position: fixed;
+      top: 0; left: 0; right: 0; bottom: 0;
+      background-color: rgba(0, 64, 128, 0.3);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      z-index: 10001;
+      font-family: Arial, sans-serif;
+    }
+
+    #warning-modal .modal-content {
+      background-color: #f0f7ff;
+      border: 2px solid #0077cc;
+      padding: 25px 20px;
+      border-radius: 10px;
+      max-width: 600px;
+      width: 90%;
+      text-align: center;
+      color: #004080;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+      font-size: 18px;
+      position: relative;
+    }
+
+    #warning-modal button {
+      margin-top: 20px;
+      background-color: #0077cc;
+      color: white;
+      border: none;
+      padding: 10px 20px;
+      font-size: 16px;
+      border-radius: 6px;
+      cursor: pointer;
+      transition: background-color 0.3s ease;
+    }
+
+    #warning-modal button:hover {
+      background-color: #005fa3;
+    }
+  </style>
+</head>
+<body>
+  <div class="container">
+    <h1>Wichtige Hinweise 💙</h1>
+
+    <p><span class="emoji"></span>Bevor wir gemeinsam starten, hier ein paar hilfreiche Informationen zum Ablauf, ganz ohne Stress, damit du weißt, was dich erwartet:</p>
+
+    <p><span class="emoji">🌟</span>Zu jeder Frage bekommst du bis zu vier Antwortmöglichkeiten. Eine oder mehrere davon sind richtig, lies  in Ruhe und vertraue deinem Wissen oder Gefühl.</p>
+
+    <p><span class="emoji">✅</span>Wichtig ist nur: Wähle alle richtigen Antworten, aber keine falschen. Dann zählt die Frage als richtig beantwortet.</p>
+
+    <p><span class="emoji">📉</span>Fehlerpunkte brauchst du nicht zu fürchten, es ist ganz normal, mal etwas falsch zu machen. Du bestehst den Test, solange du nicht mehr als <strong>10 Fehlerpunkte</strong> sammelst.</p>
+
+    <p><span class="emoji">💡</span>Keine Antwort? Bei diesem Online-Test musst du bei jeder Frage etwas auswählen oder eingeben, einfach, damit du aktiv mitdenkst. Und keine Sorge: du bekommst Rückmeldungen und kannst jederzeit dazulernen.</p>
+
+    <button class="start-btn" id="startTestBtn">Test starten</button>
+  </div>
+
+  <!-- Hinweis Modal -->
+  <div id="warning-modal">
+    <div class="modal-content">
+<p><strong>Hinweis:</strong> Dies ist <strong>kein offizieller Führerscheintest</strong> und orientiert sich nicht daran. 
+  
+<p>Ich habe versucht, diesen Test so unterhaltsam wie möglich zu gestalten. Meiner Meinung nach sind Humor und Freude am Lernen die besten Methoden, um schwierigen Stoff zu meistern.</p>
+  
+<p>Für offizielle Tests wende dich bitte an andere Webseiten.</p>
+
+      <button id="close-warning">Verstanden</button>
+    </div>
+  </div>
+
+  <script>
+    document.getElementById('close-warning').addEventListener('click', () => {
+      document.getElementById('warning-modal').style.display = 'none';
+    });
+
+    window.addEventListener('DOMContentLoaded', () => {
+      document.getElementById('warning-modal').style.display = 'flex';
+    });
+
+    const questions = [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35, 36, 37, 38, 39, 40, 41, 42, 43, 44, 45, 46, 47, 48, 49, 50, 51, 52, 53, 54, 55, 56, 57, 58, 59, 60, 61, 62, 63, 64, 65, 66, 67, 68 ,69, 70, 71, 72, 73, 74, 75, 76]; 
+
+    function shuffle(array) {
+      for (let i = array.length -1; i > 0; i--) {
+        const j = Math.floor(Math.random() * (i +1));
+        [array[i], array[j]] = [array[j], array[i]];
+      }
+      return array;
+    }
+
+    document.getElementById('startTestBtn').addEventListener('click', () => {
+      const order = shuffle([...questions]);
+      localStorage.setItem('quizOrder', JSON.stringify(order));
+      localStorage.setItem('currentScore', '0');
+      location.href = 'question.html?q=0';
+    });
+  </script>
+</body>
+</html>
