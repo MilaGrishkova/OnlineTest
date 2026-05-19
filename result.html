@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>result</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background:
+      linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+      url('foto/index1.png') no-repeat center center fixed;
+    background-size: cover;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+    color: #333;
+  }
+
+  .container {
+    max-width: 700px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px 20px 40px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+    text-align: center;
+  }
+
+  h1 {
+    color: #004080;
+    margin-bottom: 40px;
+  }
+
+  .result {
+    font-size: 24px;
+    margin: 15px 0;
+    color: #004080;
+  }
+
+  button {
+    margin-top: 30px;
+    padding: 15px 40px;
+    font-size: 20px;
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+    width: max-content;
+  }
+
+  button:hover {
+    background-color: #005fa3;
+  }
+
+  @media (max-width: 400px) {
+    .result {
+      font-size: 20px;
+    }
+    button {
+      font-size: 18px;
+      padding: 12px 30px;
+    }
+  }
+</style>
+</head>
+<body>
+
+  <div class="container">
+  <h1>Dein Ergebnis</h1>
+
+  <div class="result" id="correctCount">Richtige Antworten: 0</div>
+  <div class="result" id="wrongCount">Falsche Antworten: 0</div>
+
+  <p id="feedbackMessage" class="feedback-message"></p>
+
+  <button id="restartBtn">Test erneut starten</button>
+</div>
+
+<script>
+  const correct = parseInt(localStorage.getItem('correctAnswers')) || 0;
+  const wrong = parseInt(localStorage.getItem('wrongAnswers')) || 0;
+
+  const totalQuestions = 80;
+
+  const correctCount = document.getElementById('correctCount');
+  const wrongCount = document.getElementById('wrongCount');
+  const totalCount = document.getElementById('totalCount');
+  const feedbackMessage = document.getElementById('feedbackMessage');
+
+  correctCount.textContent = `✅ Richtige Antworten: ${correct}`;
+  wrongCount.textContent = `💬 Antworten zum Üben: ${wrong}`;
+
+
+  let message = '';
+
+  if (correct === 0 && wrong === 0) {
+    message = 'Du hast den Test noch nicht begonnen. Starte einfach neu, wenn du bereit bist! 💪';
+  } else if (correct === totalQuestions) {
+    message = 'Fantastisch! 🎉 Du hast alle Fragen richtig beantwortet! Super gemacht!';
+  } else if (correct / totalQuestions >= 0.8) {
+    message = 'Sehr gut! ✨ Du bist fast perfekt – nur noch ein kleiner Schritt!';
+  } else if (correct / totalQuestions >= 0.5) {
+    message = 'Schon ganz gut! 👍 Du bist auf dem richtigen Weg! Weiter üben lohnt sich.';
+  } else {
+    message = 'Keine Sorge! 😊 Jeder fängt mal an! Übe weiter, du schaffst das!';
+  }
+
+  feedbackMessage.textContent = message;
+
+  document.getElementById('restartBtn').addEventListener('click', () => {
+    localStorage.setItem('correctAnswers', '0');
+    localStorage.setItem('wrongAnswers', '0');
+    localStorage.setItem('quizOrder', '[]');
+    localStorage.setItem('currentScore', '0');
+    location.href = 'info.html';
+  });
+</script>
+
+</body>
+</html>
