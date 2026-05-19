@@ -1,0 +1,1095 @@
+<!DOCTYPE html>
+<html lang="de">
+<head>
+<meta charset="UTF-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<title>question</title>
+<style>
+  body {
+    font-family: Arial, sans-serif;
+    background:
+      linear-gradient(rgba(255,255,255,0.6), rgba(255,255,255,0.6)),
+      url('foto/index1.png') no-repeat center center fixed;
+    background-size: cover;
+    color: #333;
+    margin: 0;
+    padding: 20px;
+    min-height: 100vh;
+    display: flex;
+    justify-content: center;
+    align-items: flex-start;
+  }
+
+  .container {
+    max-width: 700px;
+    width: 100%;
+    background: rgba(255, 255, 255, 0.9);
+    padding: 30px 20px 40px 20px;
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0,0,0,0.1);
+    box-sizing: border-box;
+  }
+
+  h2 {
+    color: #004080;
+    margin-bottom: 20px;
+    text-align: center;
+  }
+
+  p {
+    font-size: 18px;
+    margin: 12px 0 25px 0;
+    text-align: center;
+    color: #004080;
+  }
+
+  img {
+    max-width: 300px;
+    width: 100%;
+    height: auto;
+    display: block;
+    margin: 0 auto 30px auto;
+    border-radius: 8px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.3);
+  }
+.answers {
+  max-width: 500px;
+  margin: 0 auto 30px;
+  text-align: left;
+  padding-left: 10px;
+  white-space: normal;      
+  overflow-x: visible;     
+  word-wrap: break-word;   
+}
+
+.answers label {
+  display: flex;
+  align-items: flex-start;
+  margin: 15px 0;
+  font-size: 18px;
+  color: #333;
+  gap: 10px;
+  line-height: 1.4;
+}
+
+
+  .answers input[type="checkbox"] {
+    margin-right: 10px;
+    transform: scale(1.2);
+    vertical-align: middle;
+  }
+
+  button {
+    display: block;
+    margin: 30px auto 0 auto;
+    padding: 12px 25px;
+    font-size: 18px;
+    background-color: #0077cc;
+    color: white;
+    border: none;
+    border-radius: 6px;
+    cursor: pointer;
+    transition: background-color 0.3s ease;
+  }
+
+  button:hover {
+    background-color: #005fa3;
+  }
+
+  @media (max-width: 400px) {
+    p {
+      font-size: 16px;
+    }
+    .answers label {
+      font-size: 16px;
+    }
+    button {
+      font-size: 16px;
+      padding: 10px 20px;
+    }
+    
+  }
+</style>
+</head>
+<body>
+
+  <div class="container">
+    <h2 id="questionTitle"></h2>
+    <p id="questionText"></p>
+    <img id="questionImg" alt="" />
+
+    <form id="answerForm">
+      <div id="answers" class="answers"></div>
+      <button type="button" onclick="submitAnswer()">Antwort prüfen</button>
+    </form>
+  </div>
+
+<script>
+const questionsData = [
+  {
+    question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/101.jpg",
+    answers: [
+      {text: "Achtung! Hier erinnern sich Fahrer plötzlich daran, dass sie das Bügeleisen nicht ausgeschaltet haben!", correct: false},
+      {text: "Sprechen Sie lauter! Man hört Sie im Auto nicht!", correct: false},
+      {text: "Bedeutet nichts. Dieses Ausrufezeichen ist versehentlich hier gelandet.", correct: false},
+      {text: "Gefahrstelle", correct: true},
+    ],
+  },
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/101-10.jpg",
+    answers: [
+      {text: "Im Spielzeugladen nebenan kann man ein kleines Flugzeug kaufen.", correct: false},
+      {text: "Das ist ein UFO.", correct: false},
+      {text: "Lass dem Flugzeug den Vortritt.", correct: false},
+      {text: "Flugbetrieb.", correct: true},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/101-20.jpg",
+    answers: [
+      {text: "Im Spielzeugladen nebenan kann man ein kleines Flugzeug kaufen.", correct: false},
+      {text: "Das ist ein UFO.", correct: false},
+      {text: "Lass dem Flugzeug den Vortritt.", correct: false},
+      {text: "Flugbetrieb.", correct: true},
+    ],
+  },
+  
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/101.jpg",
+    answers: [
+      {text: "Man stellt den Gefahrzeichen innerorts unmittelbar vor der Gefahrenstelle auf.", correct: true},
+      {text: "Außerorts wird das Schild in einem Abstand von 150 bis 250 Metern vor der Gefahrenstelle aufgestellt.", correct: true},
+      {text: "Es kann als Zusatzzeichen verwendet werden, insbesondere wenn die Entfernung von der Standardentfernung (150–250 m) abweicht, z B mit der Angabe „100 m“.", correct: true},
+      {text: "Das Zeichen dient dazu, Autofahrer zu signalisieren, hier besonders vorsichtig zu fahren und jederzeit bremsbereit zu sein.", correct: true},
+    ],
+  },
+
+{
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/101-11.jpg",
+    answers: [
+      {text: "Hier haben die Beatles ihr berühmtes Foto gemacht.", correct: false},
+      {text: "Ein Gefahrenzeichen kündigt einen Fußgängerüberweg an – umgangssprachlich „Zebrastreifen“.", correct: true},
+      {text: "An diesem Überweg müssen Fahrzeuge den Fußgängern das Überqueren der Straße ermöglichen.", correct: true},
+      {text: "Ein Mensch geht über eine Brücke, die aus fünf Holzstämmen besteht.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild „Viehtrieb“?",
+    img: "Foto/gefahrzeichen/101-12.jpg",
+    answers: [
+      {text: "Warnung für Vegetarier: Hier wird Fleisch gegessen.", correct: false},
+      {text: "Warnung vor möglichem Viehtrieb.", correct: true},
+      {text: "Warnung für das Vieh: Hier wird Fleisch gegessen.", correct: false},
+      {text: "Warnung für Bienen: Hier frisst das Vieh Gras.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/101-13.jpg",
+    answers: [
+      {text: "Eilt zur Prinzessin, mach Platz!", correct: false},
+      {text: "Reiter.", correct: true},
+      {text: "Durchfahrt für Autos verboten – ab hier nur noch mit dem Pferd.", correct: false},
+      {text: "Sie betreten das Mittelalter.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet Schild „Amphibienwanderung“?",
+    img: "Foto/gefahrzeichen/101-14.jpg",
+    answers: [
+      {text: "Leckt keine Frösche!", correct: false},
+      {text: "Aufmerksames Fahren.", correct: true},
+      {text: "Bewahrt Ruhe, springt nicht um die Wette und quakt nicht ohne Grund!", correct: false},
+      {text: "Mückenfreie Zone.", correct: false},
+    ],
+  },
+
+ {
+     question: "Wovor warnt das Schild „Steinschlag“?",
+    img: "Foto/gefahrzeichen/101-15.jpg",
+    answers: [
+      {text: "Warnung vor fallenden Preisen für Steine.", correct: false},
+      {text: "Warnung vor herabfallenden Steinen oder bereits auf der Fahrbahn liegenden Steinen.", correct: true},
+      {text: "Warnung vor dem Bau neuer Pyramiden in 150–200 Metern", correct: false},
+      {text: "Warnung vor dem möglichen Herabfallen von nur vier Steinen.", correct: false},
+    ],
+  },
+
+  {
+     question: "Wovor warnt das Schild „Steinschlag“?",
+    img: "Foto/gefahrzeichen/101-21.jpg",
+    answers: [
+      {text: "Hier haben die Beatles ihr berühmtes Foto gemacht.", correct: false},
+      {text: "Ein Gefahrenzeichen kündigt einen Fußgängerüberweg an – umgangssprachlich „Zebrastreifen“.", correct: true},
+      {text: "An diesem Überweg müssen Fahrzeuge den Fußgängern das Überqueren der Straße ermöglichen.", correct: true},
+      {text: "Ein Mensch geht über eine Brücke, die aus fünf Holzstämmen besteht.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild „Viehtrieb“?",
+    img: "Foto/gefahrzeichen/101-22.jpg",
+    answers: [
+      {text: "Warnung für Vegetarier: Hier wird Fleisch gegessen.", correct: false},
+      {text: "Warnung vor möglichem Viehtrieb.", correct: true},
+      {text: "Warnung für das Vieh: Hier wird Fleisch gegessen.", correct: false},
+      {text: "Warnung für Bienen: Hier frisst das Vieh Gras.", correct: false},
+    ],
+  },
+
+   {
+     question: "Was bedeutet Schild Amphibienwanderung?",
+    img: "Foto/gefahrzeichen/101-24.jpg",
+    answers: [
+      {text: "Leckt keine Frösche!", correct: false},
+      {text: "Aufmerksames Fahren.", correct: true},
+      {text: "Bewahrt Ruhe, springt nicht um die Wette und quakt nicht ohne Grund!", correct: false},
+      {text: "Mückenfreie Zone.", correct: false},
+    ],
+  },
+  
+  {
+     question: "Wovor warnt das Schild „Steinschlag“?",
+    img: "Foto/gefahrzeichen/101-25.jpg",
+    answers: [
+      {text: "Warnung vor fallenden Preisen für Steine.", correct: false},
+      {text: "Warnung vor herabfallenden Steinen oder bereits auf der Fahrbahn liegenden Steinen.", correct: true},
+      {text: "Warnung vor dem Bau neuer Pyramiden in 150–200 Metern", correct: false},
+      {text: "Warnung vor dem möglichen Herabfallen von nur vier Steinen.", correct: false},
+    ],
+  },
+  
+  {
+     question: "Wovor warnt das Schild?",
+    img: "Foto/gefahrzeichen/101-51.jpg",
+    answers: [
+      {text: " „Winter is Coming“.", correct: false},
+      {text: "Schnee- oder Eisglätte.", correct: true},
+      {text: "In 150 Metern: Kostenloser Kühlschrank.", correct: false},
+      {text: "Sie fahren in die Heimat von Opa Frost ein.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/101-52.jpg",
+    answers: [
+      {text: "Man sollte besonders viel Abstand zu vorausfahrenden Fahrzeugen gehalten werden.", correct: true},
+      {text: "Mit dem Gefahrzeichen „Splitt, Schotter“ wird auf mögliche Gefahren durch nicht befestigte Fahrbahnoberflächen, Steine, Schotter oder Splitt hingewiesen.", correct: true},
+      {text: "Funken sprühen unter den Reifen.", correct: false},
+      {text: "Man sollte daher die Geschwindigkeit reduzieren.", correct: true},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/101-53.jpg",
+    answers: [
+      {text: "Wale stranden am Ufer, Autos stürzen ins Wasser.", correct: false},
+      {text: "In der Nähe befindet sich eines ungesicherten Ufers.", correct: true},
+      {text: "In 150–200 Metern können Sie Ihr Auto waschen.", correct: false},
+      {text: "In 150–200 Metern wird Ihr Auto zum U-Boot upgegradet.", correct: false},
+    ],
+  },
+
+  {
+     question: "Wann siehst du dieses Schild?",
+    img: "Foto/gefahrzeichen/101-54.jpg",
+    answers: [
+      {text: "Die Gefahr besteht, wenn überhängende Äste von Bäumen oder Büschen den Verkehrsraum blockieren könnten.", correct: true},
+      {text: "Dieses Verkehrszeichen wird nur bei besonderen Gefahrenlagen eingesetzt.", correct: true},
+      {text: "Auch in der Fahrbahnmitte kann die Durchfahrt dadurch eingeschränkt sein.", correct: true},
+      {text: "Das Verkehrszeichen „Unzureichendes Lichtraumprofil“ weist auf eine Stelle hin, an der die Durchfahrtshöhe über der Fahrbahn begrenzt ist. Ursache dafür können überhängende Äste, Brücken, Unterführungen oder andere bauliche Hindernisse sein.", correct: true},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild „Bewegliche Brücke“?",
+    img: "Foto/gefahrzeichen/101-55.jpg",
+    answers: [
+      {text: "An der nachfolgenden Brücke muss möglicherweise vorübergehend angehalten werden.", correct: true},
+      {text: "Dieses Verkehrszeichen wird nur bei besonderen Gefahrenlagen eingesetzt.", correct: true},
+      {text: "Dies ist jedoch nur erforderlich, wenn die unmittelbar am Haltepunkt notwendigen Sicherungsmaßnahmen unerwartet auftreten und nicht rechtzeitig erkennbar sind.", correct: true},
+      {text: "Baden erlaubt.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild „Bewegliche Brücke“?",
+    img: "Foto/gefahrzeichen/102.jpg",
+    answers: [
+      {text: "„Rechts-vor-Links-Schild“.", correct: true},
+      {text: "„Zwei Striche“.", correct: false},
+      {text: "„Sie fahren in die Schweiz ein“.", correct: false},
+      {text: "„Apotheke“.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/103-10.jpg",
+    answers: [
+      {text: "Dass in Kürze eine gefährliche Linkskurve folgt.", correct: true},
+      {text: "Starker Wind biegt die Bleistifte.", correct: false},
+      {text: "Pflicht zum Wenden.", correct: false},
+      {text: "Drehen Sie scharf um.", correct: false},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/105-20.jpg",
+    answers: [
+      {text: "Das Schild warnt vor mindestens zwei gefährlichen Kurven voraus.", correct: true},
+      {text: "Es kann mit einem Zusatzzeichen kombiniert werden, das die Länge der kurvenreichen Strecke angibt.", correct: true},
+      {text: "Das Schild wird nur dort eingesetzt, wo nicht sofort erkennbar ist, dass sich eine Kurve nähert, die eine deutliche Geschwindigkeitsreduzierung erfordert.", correct: true},
+      {text: "Das Schild empfiehlt dem Fahrer, die Route umzubauen.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/112.jpg",
+    answers: [
+      {text: "Jemand hat den BH verloren.", correct: false},
+      {text: "Augen aus der Erde.", correct: false},
+      {text: "Warnt vor Unebenheiten in der Fahrbahn wie Bodenwellen, Querrinnen, Schlaglöchern  oder Schienen.", correct: true},
+      {text: "Unebene Fahrbahn.", correct: true},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/114.jpg",
+    answers: [
+      {text: "Fahren ist hier nur auf zwei Rädern erlaubt.", correct: false},
+      {text: "Besonders bei Regen durch Aquaplaning oder durch eine verschmutzte Fahrbahn.", correct: true},
+      {text: "Fahrzeugführer sollten deshalb die Geschwindigkeit reduzieren.", correct: true},
+      {text: "Hier besteht Schleuder- oder Rutschgefahr.", correct: true},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/117-20.jpg",
+    answers: [
+      {text: "Setzt die Segel, lasst die Ruder sinken.", correct: false},
+      {text: "Seitenwind von.", correct: true},
+      {text: "Seitenwind und starke Windböen für Fahrzeuge gefährlich werden können.", correct: true},
+      {text: "Kommt nach der Ausfahrt aus Tunneln oder bei Brücken und Waldschneisen.", correct: true},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/120.jpg",
+    answers: [
+      {text: "Siehst du hier eine Vase?", correct: false},
+      {text: "Die Fahrbahn wird im folgenden Streckenabschnitt schmaler.", correct: true},
+      {text: "Die verengt sich Fahrbahn plötzlich.", correct: true},
+      {text: "Kampf um das Vorfahrtsrecht.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/121-10.jpg",
+    answers: [
+      {text: "Eine Engstelle kommt.", correct: true},
+      {text: "Eine gefährliche Situation durch eine auf einer Seite.", correct: true},
+      {text: "Eine Linie konnte nicht gerade gezogen werden.", correct: false},
+      {text: "Kampf um das Vorfahrtsrecht.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/123.jpg",
+    answers: [
+      {text: "Arbeitsstelle.", correct: true},
+      {text: "Eine Gefahrensituation durch vorübergehende Arbeiten im Straßenraum.", correct: true},
+      {text: "Mann soll hier besonders aufmerksam sein.", correct: true},
+      {text: "Mann muss nicht mehr arbeiten.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/124.jpg",
+    answers: [
+      {text: "Stau.", correct: true},
+      {text: "Rettungsgasse bilden!", correct: true},
+      {text: "Durchfahrt nur für einen Konvoi aus drei Fahrzeugen erlaubt.", correct: false},
+      {text: "Hier sollte man das Tempo reduzieren und Abstand haltenht.", correct: true},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/125.jpg",
+    answers: [
+      {text: "Gegenverkehr.", correct: true},
+      {text: "Auf der Fahrbahn ist mit Gegenverkehr zu rechnen.", correct: true},
+      {text: "Sein oder Nichtsein.", correct: false},
+      {text: "Halt! Weiterfahrt in beide Richtungen verboten!", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/131.jpg",
+    answers: [
+      {text: "Achtung Ampel!", correct: true},
+      {text: "Das Verkehrszeichen soll die Fahrer dazu anregen, ihre Geschwindigkeit zu verringern und sich auf ein mögliches bevorstehendes Rotlicht vorzubereiten, damit sie rechtzeitig anhalten können.", correct: true},
+      {text: "Alle Ampelsignale leuchten gleichzeitig.", correct: false},
+      {text: "Achtung! Die Ampel ist defekt!", correct: false},
+    ],
+  },
+
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/133-20.jpg",
+    answers: [
+      {text: "Das Schild warnt vor Fußgängern, die auf die Fahrbahn treten oder sie überqueren könnten.", correct: true},
+      {text: "Es weist Fahrer auf die mögliche Anwesenheit von Fußgängern hin – besonders an Stellen, an denen man nicht mit ihnen rechnet.", correct: true},
+      {text: "Das Schild warnt Introvertierte vor der Anwesenheit von Extrovertierten in der Nähe.", correct: false},
+      {text: "Achtung! Laut diesem Schild ist der Mensch ein zweibeiniges, federloses Wesen – bitte langsam fahren und beobachten, ob er wirklich kein Huhn ist.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/136-10.jpg",
+    answers: [
+      {text: "Achtung, Fahrradverkehr!", correct: true},
+      {text: "Das Schild wird nur an Stellen aufgestellt, an denen Fahrradwege die Fahrbahn kreuzen und die Sicht für Autofahrer eingeschränkt ist.", correct: true},
+      {text: "Tauschen Sie Ihr Auto gegen ein Fahrrad.", correct: false},
+      {text: "Fahrräder im Sonderangebot!", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/142-10.jpg",
+    answers: [
+      {text: "Wildwechsel", correct: true},
+      {text: "Häufige Bewegungen von Wildtieren auf diesem Straßenabschnitt.", correct: true},
+      {text: "Vorsicht, hier finden Wettbewerbe im Weitsprung der Tiere statt!", correct: false},
+      {text: "Tierheim in 300 Metern.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/151.jpg",
+    answers: [
+      {text: "Bahnübergang", correct: true},
+      {text: "Hier ist einen beschrankten oder unbeschrankten Bahnübergang an.", correct: true},
+      {text: "Weiterfahrt nur mit dem Zug möglich.", correct: false},
+      {text: "Bitte Fahrschein vorzeigen.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/157-10.jpg",
+    answers: [
+      {text: "In etwa 240 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken.", correct: true},
+      {text: "In etwa 140 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken.", correct: false},
+      {text: "In etwa 40 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken.", correct: false},
+      {text: "In etwa 10 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken..", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/157-11.jpg",
+    answers: [
+      {text: "In etwa 150 Metern Entfernung  folgt ein Bahnübergang, mit oder ohne Schranken.", correct: true},
+      {text: "In etwa 100 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken.", correct: false},
+      {text: "In etwa 50 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken.", correct: false},
+      {text: "In etwa 10 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken..", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/159-10.jpg",
+    answers: [
+      {text: "In etwa 160 Metern Entfernung  folgt ein Bahnübergang, mit oder ohne Schranken.", correct: true},
+      {text: "In etwa 100 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken.", correct: false},
+      {text: "In etwa 60 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken.", correct: false},
+      {text: "In etwa 10 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken..", correct: false},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/159-21.jpg",
+    answers: [
+      {text: "In etwa 100 Metern Entfernung  folgt ein Bahnübergang, mit oder ohne Schranken.", correct: true},
+      {text: "In etwa 300 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken.", correct: false},
+      {text: "In etwa 200 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken.", correct: false},
+      {text: "In etwa 10 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken..", correct: false},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/162-20.jpg",
+    answers: [
+      {text: "In etwa 80 Metern Entfernung  folgt ein Bahnübergang, mit oder ohne Schranken.", correct: true},
+      {text: "In etwa 30 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken.", correct: false},
+      {text: "In etwa 20 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken.", correct: false},
+      {text: "In etwa 10 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken..", correct: false},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/gefahrzeichen/162-21.jpg",
+    answers: [
+      {text: "In etwa 80 Metern Entfernung  folgt ein Bahnübergang, mit oder ohne Schranken.", correct: true},
+      {text: "In etwa 50 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken.", correct: false},
+      {text: "In etwa 20 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken.", correct: false},
+      {text: "In etwa 10 Metern Entfernung folgt ein Bahnübergang, mit oder ohne Schranken..", correct: false},
+    ],
+  },
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/201-50.jpg",
+    answers: [
+      {text: "Andreaskreuz.", correct: true},
+      {text: "Bahnübergang.", correct:  true},
+      {text: "Der Schienenverkehr hat Vorrang.", correct:  true},
+      {text: "Zwei Schwangerschaftstests.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/205.jpg",
+    answers: [
+      {text: "Man muss Vorfahrt gewähren", correct: true},
+      {text: "Parken ist vor und hinter dem Verkehrsschild verboten.", correct:  true},
+      {text: "Man soll immer die Faustregel „rechts vor links“ beachten.", correct:  true},
+      {text: "Kein Problem, das ist nur ein leeres Schild – jemand hat vergessen, das Bild einzufügen.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/208.jpg",
+    answers: [
+      {text: "Vorrang des Gegenverkehrs", correct: true},
+      {text: "Das Schild kennzeichnet eine Engstelle.", correct:  true},
+      {text: "Der rote Pfeil kennzeichnet die Fahrtrichtung, die dem Gegenverkehr Vorrang gewähren muss, während der schwarze Pfeil die vorfahrtberechtigte Richtung angibt.", correct:  true},
+      {text: "Vorwärtsfahren verboten, Rückwärtsfahren erlaubt.", correct: false},
+    ],
+  },
+
+  {
+     question: "Du näherst dich einer Kreuzung mit einer Stopptafel. Wie verhaltest du dich?",
+    img: "Foto/vorschriftzeichen/206.jpg",
+    answers: [
+      {text: "Ich werde anhalten und den Fahrzeugen, die von links oder rechts kommen, den Vorrang geben", correct: true},
+      {text: "Ist eine Haltelinie vorhanden, halte ich davor an. Oder, wenn jeine Haltelinie gibt's,halte ich dort an, wo gute Übersicht besteht.", correct:  true},
+      {text: "Wartezeit ist  mindestens drei Sekunden.", correct:  true},
+      {text: "Ich fahre weiter. die Zeit wartet nicht.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/209-30.jpg",
+    answers: [
+      {text: "Es ist ein Vorschriftzeichen und es zeigt Pflicht, an der nächsten Kreuzung oder Einmündung ausschließlich geradeaus zu fahren.", correct: true},
+      {text: "Geschwindigkeitsbeschränkungen auf dem durch dieses Zeichen gekennzeichneten Straßenabschnitt werden durch andere Verkehrszeichen geregelt. Fehlen solche Schilder, gelten die allgemeinen Geschwindigkeitsbegrenzungen für den jeweiligen Straßentyp.", correct: true},
+      {text: "Verbotene Fahrmanöver unter der Wirkung dieses Zeichens sind: das Abbiegen nach links, nach rechts sowie das Wenden. Ausnahmen von diesen Regeln können für Linienverkehr oder beim Umfahren eines Hindernisses vorgesehen sein.", correct: true},
+      {text: "Beim Befahren des durch dieses Zeichen gekennzeichneten Abschnitts muss der Fahrer auf andere Verkehrsteilnehmer Rücksicht nehmen – insbesondere auf Fußgänger und Radfahrer.", correct: true},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/209.jpg",
+    answers: [
+      {text: "Der Fahrer ist verpflichtet, nach rechts abzubiegen.", correct: true},
+      {text: "Die Geschwindigkeitsbegrenzung auf dem durch dieses Verkehrszeichen geregelten Abschnitt wird durch andere Schilder oder die allgemeinen Verkehrsregeln festgelegt. Das Zeichen selbst legt keine Geschwindigkeitsbegrenzung fest.", correct: true},
+      {text: "Verbotene Fahrmanöver unter der Wirkung dieses Zeichens sind: Geradeausfahren, Linksabbiegen und Wenden. Ausnahmen von diesen Regeln können für Linienverkehr gelten, sofern dies durch Zusatzschilder unter dem Verkehrszeichen angezeigt ist.", correct: true},
+      {text: "Der Fahrer muss auf andere Verkehrsteilnehmer Rücksicht nehmen, insbesondere Fußgängern und Radfahrern Vorfahrt gewähren, die die Fahrbahn in zulässiger Richtung überqueren.", correct: true},
+    ],
+  },
+
+  {
+     question: "Du näherst dich einer Kreuzung mit einer Stopptafel. Wie verhaltest du dich?",
+    img: "Foto/vorschriftzeichen/206.jpg",
+    answers: [
+      {text: "Ich werde anhalten und den Fahrzeugen, die von links oder rechts kommen, den Vorrang geben", correct: true},
+      {text: "Ist eine Haltelinie vorhanden, halte ich davor an. Oder, wenn jeine Haltelinie gibt's,halte ich dort an, wo gute Übersicht besteht.", correct:  true},
+      {text: "Wartezeit ist  mindestens drei Sekunden.", correct:  true},
+      {text: "Ich fahre weiter. die Zeit wartet nicht.", correct: false},
+    ],
+  },
+
+{
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/214.jpg",
+    answers: [
+      {text: "Vorgeschriebene Fahrtrichtung geradeaus oder rechts.", correct: true},
+      {text: "Andere Fahrtrichtungen sind nicht erlaubt.", correct:  true},
+      {text: "Der Fahrer muss auf andere Verkehrsteilnehmer Rücksicht nehmen, insbesondere Fußgängern und Radfahrern Vorfahrt gewähren, die die Fahrbahn in zulässiger Richtung überqueren.", correct:  true},
+      {text: "Es gilt eine Geschwindigkeitsbegrenzung von 70 km/h innerorts.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/214-30.jpg",
+    answers: [
+      {text: "Das Verkehrszeichen erlaubt nur das Abbiegen nach rechts oder links.", correct: true},
+      {text: "Das Verkehrszeichen verbietet alle Fahrmanöver, die den angegebenen Richtungen widersprechen. Wenden und Geradeausfahren sind verboten.", correct:  true},
+      {text: "Das Verkehrszeichen erlaubt nur das Geradeausfahren.", correct:  false},
+      {text: "Das Wenden ist erlaubt.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/215.jpg",
+    answers: [
+      {text: "Das Halten ist immer untersagt.", correct: true},
+      {text: "Es dürfen keine Fahrzeuge die Mittelinsel überfahren.", correct: true},
+      {text: "Beim Heranfahren sollte man hier die Geschwindigkeit drosseln.", correct: true},
+      {text: "Bei der Ausfahrt immer auf Radfahrer und Fußgänger achten und Rücksicht nehmen. Bei der Ausfahrt muss man den Blinker setzen.", correct: true},
+    ],
+  },
+
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/222-10.jpg",
+    answers: [
+      {text: "Der Fahrer ist verpflichtet, ein Hindernis links zu umfahren und dabei die Verkehrsregeln zu beachten.", correct: true},
+      {text: "Die Geschwindigkeit beim Umfahren des Hindernisses muss sicher sein und den Straßenverhältnissen angepasst werden. Falls erforderlich, muss der Fahrer das Tempo verringern.", correct: true},
+      {text: "Beim Umfahren eines Hindernisses auf der linken Seite ist es dem Fahrer untersagt, eine durchgezogene Linie zu überfahren, sofern eine solche auf der Fahrbahn vorhanden ist.", correct: true},
+      {text: "Der Fahrer muss andere Verkehrsteilnehmer berücksichtigen und darf deren Fahrt nicht behindern. Aufmerksamkeit und Vorsicht sind dabei besonders wichtig.", correct: true},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/223-1-50.jpg",
+    answers: [
+      {text: "Standspur oder Standstreifen bezeichnet befindet sich rechts neben der durchgezogenen weißen Linie. Auf Autobahnen darf er ausschließlich im Pannenfall zum Abstellen eines Fahrzeugs benutzt werden.", correct: true},
+      {text: "Die zwei linken Pfeile kennzeichnen zwei reguläre Fahrstreifen, der rechte Pfeil weist auf den Seitenstreifen hin.", correct: true},
+      {text: "Hier gilt eine zulässige Höchstgeschwindigkeit von maximal 100 km/h.", correct: true},
+      {text: "Hier gilt eine zulässige Höchstgeschwindigkeit von maximal 80 km/h.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/223-2-50.jpg",
+    answers: [
+      {text: "Seitenstreifen ist nicht mehr erlaubt.", correct: true},
+      {text: "Der Seitenstreifen dient wieder ausschließlich seinem ursprünglichen Zweck: Auf Autobahnen darf er nur im Falle einer Panne zum Abstellen eines Fahrzeugs verwendet werden.", correct: true},
+      {text: "In 100 Metern folgen drei Fahrstreifen.", correct: false},
+      {text: "In 500 Metern folgen drei Fahrstreifen.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/223-3-50.jpg",
+    answers: [
+      {text: "Seitenstreifen räumen.", correct: true},
+      {text: "Fahrzeuge, die sich dort befinden, müssen unverzüglich auf eine der beiden regulären Fahrspuren wechseln.", correct: true},
+      {text: "Das Zeichen zeigt das bevorstehende Ende der temporären Freigabe des Seitenstreifens an.", correct: true},
+      {text: "Der Seitenstreifen dient bald wieder ausschließlich als Pannenstreifen.", correct: true},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/224.jpg",
+    answers: [
+      {text: "In diesem Bereich ist das Parken in einem Abstand von 15 Metern vor und hinter dem Verkehrszeichen verboten.", correct: true},
+      {text: "Fahrzeugführer müssen außerdem die Vorschriften zum Vorbeifahren an haltenden Bussen und Straßenbahnen beachten. Wenn der Bus den linken Blinker setzt, muss das nachfolgende Fahrzeug dem Bus das Einfahren in den fließenden Verkehr ermöglichen und warten.", correct: true},
+      {text: "Kurzes Halten zum Ein- oder Aussteigenlassen von Fahrgästen ist erlaubt.", correct: true},
+      {text: "Jedoch nur für maximal drei Minuten und nur, sofern der Linienverkehr dadurch nicht behindert wird.", correct: true},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/224-51.jpg",
+    answers: [
+      {text: "Schulbushaltestelle, einseitig“ ist ein rechteckiges Vorschriftzeichen.", correct: true},
+      {text: "Zeitangaben mit Beschränkung auf Wochentage.", correct: true},
+      {text: "In diesem Bereich ist das Parken in einem Abstand von 15 Metern vor und hinter dem Verkehrszeichen verboten.", correct: true},
+      {text: "Fahrzeugführer müssen außerdem die Vorschriften zum Vorbeifahren an haltenden Bussen und Straßenbahnen beachten. Wenn der Bus den linken Blinker setzt, muss das nachfolgende Fahrzeug dem Bus das Einfahren in den fließenden Verkehr ermöglichen und warten.", correct: true},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/229.jpg",
+    answers: [
+      {text: "Taxenstand.", correct: true},
+      {text: "Anderen Fahrzeugen ist das Halten verboten.", correct: true},
+      {text: "Man darf hier halten.", correct: false},
+      {text: "Man darf hier parken.", correct: false},
+    ],
+  },
+
+ {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/229-10.jpg",
+    answers: [
+      {text: "Hier beginnt ein Taxistand.", correct: true},
+      {text: "Wenn ein Zusatzzeichen die Nutzungszeit einschränkt, ist das Parken außerhalb der angegebenen Zeiten erlaubt.", correct: true},
+      {text: "Ab hier Halteverbot für Taxen.", correct: false},
+      {text: "Man darf hier parken.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/229-31.jpg",
+    answers: [
+      {text: "Vor und hinter dem Zeichen befindet sich ein Taxistand. ", correct: true},
+      {text: "Wenn ein Zusatzzeichen die Nutzungszeit einschränkt, ist das Parken außerhalb der angegebenen Zeiten erlaubt.", correct: true},
+      {text: "Ab hier Halteverbot für Taxen.", correct: false},
+      {text: "Man darf hier parken.", correct: false},
+    ],
+  },
+ {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/237.jpg",
+    answers: [
+      {text: "Radfahrer müssen den Radweg benutzen und dürfen nicht auf der Fahrbahn fahren.", correct: true},
+      {text: "Radweg.", correct: true},
+      {text: "Andererseits ist es allen anderen Verkehrsarten verboten, den Radweg zu benutzen.", correct: true},
+      {text: "Sie betreten das Mittelalter.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/238.jpg",
+    answers: [
+      {text: "Reitweg.", correct: true},
+      {text: "Radweg.", correct: false},
+      {text: "Andererseits ist es allen anderen Verkehrsarten verboten, den Reitweg zu benutzen.", correct: true},
+      {text: "Fahrrad kostenlos!", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/239.jpg",
+    answers: [
+      {text: "Zu Fuß Gehende sind verpflichtet, die Gehwege zu benutzen.", correct: true},
+      {text: "Für alle anderen Verkehrsteilnehmer ist die Nutzung der Gehwege verboten.", correct: true},
+      {text: "Erlaubt ein Zusatzzeichen anderen Verkehrsarten, wie zum Beispiel dem Radverkehr, den Gehweg zu benutzen, darf dadurch der Fußgängerverkehr weder gefährdet noch behindert werden.", correct: true},
+      {text: "Männern ist der Durchgang untersagt.", correct: false},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/240.jpg",
+    answers: [
+      {text: "Gemeinsamer Geh- und Radweg.", correct: true},
+      {text: "Für alle anderen Verkehrsteilnehmer ist die Nutzung der Gehwege verboten.", correct: true},
+      {text: "Radfahrer müssen den Radweg benutzen und dürfen nicht auf der Fahrbahn fahren.", correct: true},
+      {text: "Männern ist der Durchgang untersagt.", correct: false},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/242-1.jpg",
+    answers: [
+      {text: "Gemeinsamer Geh- und Radweg.", correct: false},
+      {text: "Für alle anderen Verkehrsteilnehmer ist die Nutzung der Gehwege verboten.", correct: true},
+      {text: "Hier beginnt eine Fußgängerzone.", correct: true},
+      {text: "Männern ist der Durchgang untersagt.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/242-2.jpg",
+    answers: [
+      {text: "Hier beginnt eine Fußgängerzone.", correct: false},
+      {text: "Ende einer Fußgängerzone.", correct: true},
+      {text: "Gemeinsamer Geh- und Radweg.", correct: false},
+      {text: "Radweg.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/245.jpg",
+    answers: [
+      {text: "Hier beginnt eine Fußgängerzone.", correct: false},
+      {text: "Bussonderfahrstreifen.", correct: true},
+      {text: "Das Verkehrszeichen ist an jeder Kreuzung oder Einmündung zu wiederholen.", correct: true},
+      {text: "Den Fahrstreifen dürfen nur Linienbusse sowie Schul- und Behindertenbusse benutzen.", correct: true},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/250.jpg",
+    answers: [
+      {text: "Hier beginnt eine Fußgängerzone.", correct: false},
+      {text: "Verbot für Fahrzeuge aller Art.", correct: true},
+      {text: "Motorisierte Räder und Fahrräder dürfen geschoben werden.", correct: true},
+      {text: "Allgemeines Fahrverbot für sämtliche Fahrzeuge, mit Ausnahme von Handfahrzeugen. Krafträder, Fahrräder und ähnliche Fahrzeuge dürfen geschoben, aber nicht gefahren werden.", correct: true},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/251.jpg",
+    answers: [
+      {text: "Hier beginnt eine Fußgängerzone.", correct: false},
+      {text: "Verbot für Kraftwagen.", correct: true},
+      {text: "Verbot für Radverker.", correct: false},
+      {text: "Verbot für Fahrzeuge aller Art.", correct: false},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/253.jpg",
+    answers: [
+      {text: "Verbot für Kraftwagen.", correct: false},
+      {text: "Verbot für Kraftfahrzeuge über 3,5 t.", correct: true},
+      {text: "Verbot für Radverker.", correct: false},
+      {text: "Verbot für Fahrzeuge aller Art.", correct: false},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/254.jpg",
+    answers: [
+      {text: "Verbot für Kraftwagen.", correct: false},
+      {text: "Verbot für Kraftfahrzeuge über 3,5 t.", correct: false},
+      {text: "Verbot für Radverker.", correct: true},
+      {text: "Verbot für Fahrzeuge aller Art.", correct: false},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/255.jpg",
+    answers: [
+      {text: "Verbot für Radverker.", correct: false},
+      {text: "Verbot für Kraftfahrzeuge über 3,5 t.", correct: false},
+      {text: "Verbot für  Krafträder.", correct: true},
+      {text: "Verbot für Fahrzeuge aller Art.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/256.jpg",
+    answers: [
+      {text: "Verbot für Radverker.", correct: false},
+      {text: "Verbot für Krafträder.", correct: false},
+      {text: "Verbot für Mofas.", correct: true},
+      {text: "Verbot für Fahrzeuge aller Art.", correct: false},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/258.jpg",
+    answers: [
+      {text: "Verbot für Radverker.", correct: false},
+      {text: "Verbot für Krafträder.", correct: false},
+      {text: "Verbot für Reiter.", correct: true},
+      {text: "Verbot für Mofas.", correct: false},
+    ],
+  },
+
+{
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/260.jpg",
+    answers: [
+      {text: "Verbot für Radverker.", correct: false},
+      {text: "Verbot für Krafträder.", correct: false},
+      {text: "Das Zeichen verbietet sowohl Krafträdern, auch mit Beiwagen, Kleinkrafträdern und Mofas als auch Kraftwagen und sonstigen mehrspurigen Kraftfahrzeugen die Verkehrsteilnahme.", correct: true},
+      {text: "Verbot für Mofas.", correct: false},
+    ],
+  },
+
+  {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/261.jpg",
+    answers: [
+      {text: "Verbot für Radverker.", correct: false},
+      {text: "Verbot für Krafträder.", correct: false},
+      {text: "Verbot für kennzeichnungspflichtige Kraftfahrzeuge mit gefährlichen Gütern.", correct: true},
+      {text: "Verbot für Mofas.", correct: false},
+    ],
+  },
+
+   {
+     question: "Was bedeutet dieses Schild?",
+    img: "Foto/vorschriftzeichen/262.jpg",
+    answers: [
+      {text: "Zeichen verbietet Fahrzeugen, die eine bestimmte tatsächliche Masse überschreiten, die Durchfahrt. 1,2T", correct: false},
+      {text: "Zeichen verbietet Fahrzeugen, die eine bestimmte tatsächliche Masse überschreiten, die Durchfahrt. 1,5T", correct: false},
+      {text: "Zeichen verbietet Fahrzeugen, die eine bestimmte tatsächliche Masse überschreiten, die Durchfahrt. 5,5T", correct: true},
+      {text: "Zeichen verbietet Fahrzeugen, die eine bestimmte tatsächliche Masse überschreiten, die Durchfahrt. 5,2T", correct: false},
+    ],
+  },
+];
+
+
+function shuffleArray(array) {
+  return array
+    .map(value => ({ value, sort: Math.random() }))
+    .sort((a, b) => a.sort - b.sort)
+    .map(({ value }) => value);
+}
+
+if (!localStorage.getItem('quizOrder')) {
+  const shuffledOrder = shuffleArray([...Array(questionsData.length).keys()]);
+  localStorage.setItem('quizOrder', JSON.stringify(shuffledOrder));
+}
+
+const params = new URLSearchParams(window.location.search);
+const qIndex = parseInt(params.get('q')) || 0;
+const order = JSON.parse(localStorage.getItem('quizOrder')) || [];
+
+if (qIndex >= order.length) {
+  location.href = 'result.html';
+}
+
+const questionId = order[qIndex];
+const question = questionsData[questionId];
+
+question.answers = shuffleArray(question.answers);
+
+document.getElementById('questionTitle').textContent = `Frage ${qIndex + 1}`;
+document.getElementById('questionText').textContent = question.question;
+document.getElementById('questionImg').src = question.img;
+document.getElementById('questionImg').alt = question.question;
+
+const answersDiv = document.getElementById('answers');
+answersDiv.innerHTML = '';
+
+question.answers.forEach((a, i) => {
+  const id = `answer${i}`;
+  const label = document.createElement('label');
+  label.htmlFor = id;
+  label.innerHTML = `<input type="checkbox" name="answer" id="${id}" value="${a.correct}"> ${a.text}`;
+  answersDiv.appendChild(label);
+});
+
+document.querySelectorAll('input[type="checkbox"][name="answer"]').forEach(checkbox => {
+  checkbox.addEventListener('change', () => {
+    const checked = document.querySelectorAll('input[type="checkbox"][name="answer"]:checked');
+    if (checked.length > 4) {
+      checkbox.checked = false;
+      alert('Sie dürfen höchstens 4 Antworten auswählen.');
+    }
+  });
+});
+
+function submitAnswer() {
+  const form = document.getElementById('answerForm');
+  const selectedInputs = Array.from(form.querySelectorAll('input[name="answer"]:checked'));
+
+  if (selectedInputs.length === 0) {
+    alert('Bitte wählen Sie mindestens eine Antwort.');
+    return;
+  }
+
+  const correctAnswers = question.answers.filter(a => a.correct);
+  const correctSet = new Set(correctAnswers.map(a => a.text));
+
+  const selectedSet = new Set(selectedInputs.map(input => {
+    const label = input.closest('label');
+    return label.textContent.trim();
+  }));
+
+  let correctSelected = 0;
+  let wrongSelected = 0;
+
+  selectedSet.forEach(answer => {
+    if (correctSet.has(answer)) {
+      correctSelected++;
+    } else {
+      wrongSelected++; 
+    }
+  });
+
+
+  correctSet.forEach(correct => {
+    if (!selectedSet.has(correct)) {
+      wrongSelected++; 
+    }
+  });
+
+  let totalCorrect = parseInt(localStorage.getItem('correctAnswers')) || 0;
+  let totalWrong = parseInt(localStorage.getItem('wrongAnswers')) || 0;
+
+  totalCorrect += correctSelected;
+  totalWrong += wrongSelected;
+
+  localStorage.setItem('correctAnswers', totalCorrect);
+  localStorage.setItem('wrongAnswers', totalWrong);
+
+
+  if (totalWrong >= 10) {
+    const modal = document.getElementById('modal');
+    modal.style.display = 'flex';
+
+    setTimeout(() => {
+      location.href = 'result.html';
+    }, 2000); 
+
+    return;
+  }
+
+
+  const currentIndex = parseInt(new URLSearchParams(window.location.search).get('q')) || 0;
+
+const correctAnswerText = correctAnswers.map(a => `<p>${a.text}</p>`).join('');
+  const query = new URLSearchParams({
+    q: currentIndex,
+    correct: totalCorrect,
+    wrong: totalWrong,
+    correctAnswer: correctAnswerText
+  });
+
+  location.href = `answer.html?${query.toString()}`;
+}
+
+</script>
+<div id="modal" style="display:none; position:fixed; top:0; left:0; width:100vw; height:100vh; background-color:rgba(0,0,0,0.5); justify-content:center; align-items:center; z-index:1000;">
+  <div style="background:rgb(255, 255, 255); padding:30px 20px; border-radius:8px; max-width:400px; width:90%; text-align:center; box-shadow:0 4px 10px rgba(0,0,0,0.2); font-size:18px;">
+    <p style="margin-bottom:20px; color:#004080;">Sie haben 10 Fehler erreicht. Der Test wird jetzt leider beendet.</p>
+  </div>
+</div>
+
+</body>
+</html>
